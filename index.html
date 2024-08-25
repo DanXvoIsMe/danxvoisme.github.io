@@ -197,7 +197,7 @@
             const monacocode = monaco.editor.getModels()[0].getValue();
             if (attached) {
                 try {
-                    const response = await fetch(`https://api.perox.dev/s/ScriptifySession_${GameId}/execute`, {
+                    const response = await fetch(`https://api.perox.dev/s/ScriptifySession_${GameId}_${SessionID}/execute`, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -219,7 +219,7 @@
 
         async function attachtogame() {
             try {
-                const response = await fetch(`https://api.perox.dev/s/ScriptifySession_${GameId}/attach`, {
+                const response = await fetch(`https://api.perox.dev/s/ScriptifySession_${GameId}_${SessionID}/attach`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
