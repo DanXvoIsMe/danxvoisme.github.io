@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serverify</title>
+    <link rel="stylesheet" href="https://unpkg.com/monaco-editor/min/vs/editor/editor.main.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+        }
+        .header {
+            background-color: #3c3c3c;
+            color: #dcdcdc;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        .header .title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header .top-right-buttons {
+            display: flex;
+            align-items: center;
+        }
+        .header .top-right-buttons button {
+            background: none;
+            border: none;
+            color: #dcdcdc;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 80vh;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: #3c3c3c;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #dcdcdc;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .editor-container {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-start;
+        }
+        button {
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #5a0c9e;
+        }
+        .settings-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #dcdcdc;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+        .settings-panel .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #3c3c3c;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .settings-panel .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #dcdcdc;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .settings-panel input[type="text"] {
+            padding: 10px;
+            border: 1px solid #6a0dad;
+            border-radius: 5px;
+            width: calc(100% - 130px);
+            margin-right: 10px;
+            background-color: #2d2d2d;
+            color: #dcdcdc;
+        }
+        .settings-panel button {
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .settings-panel button:hover {
+            background-color: #5a0c9e;
+        }
+        .settings-panel .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #dcdcdc;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Serverify</div>
+        <div class="top-right-buttons">
+            <button onclick="openSettings()">Settings</button>
+            <button onclick="alert('Dashboard Button Clicked')">Dashboard</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="title">Serverify</div>
+            <div class="editor-container" id="editor"></div>
+            <div class="button-container">
+                <button onclick="executeCode()">Execute</button>
+                <button onclick="attachtogame()">Attach</button>
+                <button onclick="clearCode()">Clear</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-panel" id="settingsPanel">
+        <button class="close-btn" onclick="closeSettings()">×</button>
+        <div class="container">
+            <div class="title">Serverify - Whitelist Settings</div>
+            <div class="form-container">
+                <input type="text" id="username" placeholder="Username here">
+                <input type="text" id="gameId" placeholder="Game ID here">
+                <button type="button" onclick="submitSettings()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/monaco-editor/min/vs/loader.js"></script>
+    <script>
+        let Username = "";
+        let GameId = "";
+        let attached = false;
+
+        require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            monaco.editor.create(document.getElementById('editor'), {
+                value: '-- Write your Lua code here\nprint("Hello, world!")',
+                language: 'lua',
+                theme: 'vs-dark',
+                automaticLayout: true
+            });
+        });
+
+        async function executeCode() {
+            const monacocode = monaco.editor.getModels()[0].getValue();
+            if (attached) {
+                try {
+                    const response = await fetch(`https://api.perox.dev/s/ScriptifySession_${GameId}/execute`, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ "code": monacocode, "user": Username })
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    alert('Code executed successfully!');
+                } catch (error) {
+                    alert(`Failed to execute code: ${error.message}`);
+                }
+            } else {
+                alert('Please attach to a game first.');
+            }
+        }
+
+        async function attachtogame() {
+            try {
+                const response = await fetch(`https://api.perox.dev/s/ScriptifySession_${GameId}/attach`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ "user": Username })
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                attached = true;
+                alert('Attached to game successfully!');
+            } catch (error) {
+                alert(`Failed to attach to game: ${error.message}`);
+            }
+        }
+
+        function clearCode() {
+            monaco.editor.getModels()[0].setValue('');
+        }
+
+        function openSettings() {
+            document.getElementById('settingsPanel').style.display = 'flex';
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsPanel').style.display = 'none';
+        }
+
+        function submitSettings() {
+            Username = document.getElementById('username').value;
+            GameId = document.getElementById('gameId').value;
+            closeSettings();
+        }
+    </script>
+</body>
+</html>
