@@ -170,6 +170,7 @@
             <div class="form-container">
                 <input type="text" id="username" placeholder="Username here">
                 <input type="text" id="gameId" placeholder="Game ID here">
+                <input type="text" id="sessionid" placeholder="Session ID here">
                 <button type="button" onclick="submitSettings()">Submit</button>
             </div>
         </div>
@@ -179,6 +180,7 @@
     <script>
         let Username = "";
         let GameId = "";
+        let SessionID = "";
         let attached = false;
 
         require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor/min/vs' } });
@@ -201,7 +203,7 @@
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ "code": monacocode, "user": Username })
+                        body: JSON.stringify({ "code": monacocode, "user": Username, "sessionid": SessionID })
                     });
                     if (!response.ok) {
                         throw new Error('Network response was not ok.');
@@ -223,7 +225,7 @@
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ "user": Username })
+                    body: JSON.stringify({ "user": Username, "sessionid": SessionID })
                 });
                 if (!response.ok) {
                     throw new Error('Network response was not ok.');
@@ -250,6 +252,7 @@
         function submitSettings() {
             Username = document.getElementById('username').value;
             GameId = document.getElementById('gameId').value;
+            SessionID document.getElementById('sessionid').value
             closeSettings();
         }
     </script>
