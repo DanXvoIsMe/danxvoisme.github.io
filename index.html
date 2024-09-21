@@ -166,9 +166,8 @@
     <div class="settings-panel" id="settingsPanel">
         <button class="close-btn" onclick="closeSettings()">×</button>
         <div class="container">
-            <div class="title">Serverify - Whitelist Settings</div>
+            <div class="title">Serverify - Settings</div>
             <div class="form-container">
-                <input type="text" id="username" placeholder="Username here">
                 <input type="text" id="gameId" placeholder="Game ID here">
                 <input type="text" id="sessionid" placeholder="Session ID here">
                 <button type="button" onclick="submitSettings()">Submit</button>
@@ -178,7 +177,6 @@
 
     <script src="https://unpkg.com/monaco-editor/min/vs/loader.js"></script>
     <script>
-        let Username = "";
         let GameId = "";
         let SessionID = "";
         let attached = false;
@@ -203,7 +201,7 @@
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ "code": monacocode, "user": Username, "sessionid": SessionID })
+                        body: JSON.stringify({ "code": monacocode, "sessionid": SessionID })
                     });
                     if (!response.ok) {
                         throw new Error('Network response was not ok.');
@@ -225,7 +223,7 @@
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ "user": Username, "sessionid": SessionID })
+                    body: JSON.stringify({ "sessionid": SessionID })
                 });
                 if (!response.ok) {
                     throw new Error('Network response was not ok.');
@@ -250,7 +248,6 @@
         }
 
         function submitSettings() {
-            Username = document.getElementById('username').value;
             GameId = document.getElementById('gameId').value;
             SessionID = document.getElementById('sessionid').value
             closeSettings();
