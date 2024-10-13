@@ -9,110 +9,100 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
-            color: #212529;
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+            margin: 0;
+            padding: 0;
         }
-        .navbar {
-            background-color: #343a40;
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            background-color: #2c2c2c;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
         }
-        .navbar-brand, .navbar-nav .nav-link {
-            color: #fff !important;
-        }
-        .editor-container {
-            height: 500px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .btn-primary, .btn-secondary, .btn-danger, .btn-info {
-            padding: 10px 20px;
-        }
-        .btn i {
-            margin-right: 5px;
-        }
-        .offcanvas-body {
-            padding: 1.5rem;
-            background-color: #343a40;
-            color: white;
-        }
-        .offcanvas a {
-            color: white;
+        .sidebar .nav-link {
+            color: #dcdcdc;
             margin-bottom: 10px;
+            font-size: 18px;
         }
-        .offcanvas a:hover {
-            color: #adb5bd;
-        }
-        .modal-content {
-            background-color: #343a40;
+        .sidebar .nav-link:hover {
             color: #fff;
-        }
-        .form-control {
-            background-color: #495057;
-            color: #fff;
-        }
-        .form-control::placeholder {
-            color: #ced4da;
         }
         .main-content {
-            margin-left: 260px;
-            transition: margin-left 0.3s;
+            margin-left: 250px;
+            padding: 40px;
+        }
+        .editor-container {
+            height: 400px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        button {
+            margin: 5px;
+        }
+        .btn-custom {
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-custom:hover {
+            background-color: #5a0c9e;
+        }
+        .navbar {
+            background-color: #2c2c2c;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Serverify</a>
-        <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
-            <i class="bi bi-list"></i> Menu
-        </button>
-        <div class="d-flex">
-            <button class="btn btn-outline-light" onclick="openSettings()">Settings</button>
-        </div>
-    </div>
-</nav>
-
 <!-- Sidebar -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasSidebarLabel">Serverify</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <nav class="nav flex-column">
-            <a class="nav-link" href="#" onclick="loadSection('Executor')"><i class="bi bi-terminal"></i> Executor</a>
-            <a class="nav-link" href="#" onclick="loadSection('Troll')"><i class="bi bi-emoji-laughing"></i> Troll</a>
-            <a class="nav-link" href="#" onclick="loadSection('Games')"><i class="bi bi-controller"></i> Games</a>
-        </nav>
-    </div>
+<div class="sidebar">
+    <h3 class="text-light">Serverify</h3>
+    <nav class="nav flex-column">
+        <a class="nav-link" href="#" onclick="loadSection('Executor')"><i class="bi bi-terminal"></i> Executor</a>
+        <a class="nav-link" href="#" onclick="loadSection('Troll')"><i class="bi bi-emoji-laughing"></i> Troll</a>
+        <a class="nav-link" href="#" onclick="loadSection('Games')"><i class="bi bi-controller"></i> Games</a>
+    </nav>
 </div>
 
 <!-- Main Content -->
 <div class="main-content">
-    <div class="container my-5">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Code Editor Card -->
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title text-center" id="sectionTitle">Executor</h5>
-                        <div class="editor-container" id="editor"></div>
-                        <div class="mt-4 d-flex justify-content-center">
-                            <button class="btn btn-primary mx-2" onclick="executeCode()">
-                                <i class="bi bi-play-circle"></i> Execute
-                            </button>
-                            <button class="btn btn-secondary mx-2" onclick="attachtogame()">
-                                <i class="bi bi-plug"></i> Attach
-                            </button>
-                            <button class="btn btn-danger mx-2" onclick="clearCode()">
-                                <i class="bi bi-trash"></i> Clear
-                            </button>
-                            <button class="btn btn-info mx-2" onclick="r6()">
-                                <i class="bi bi-gear"></i> R6
-                            </button>
-                        </div>
-                    </div>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <h4 id="sectionTitle">Executor</h4>
+            <button class="btn btn-outline-light" onclick="openSettings()">Settings</button>
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Code Editor Card -->
+        <div class="card bg-dark text-light">
+            <div class="card-body">
+                <div class="editor-container" id="editor"></div>
+                <div class="mt-4 d-flex justify-content-center">
+                    <button class="btn-custom mx-2" onclick="executeCode()">
+                        <i class="bi bi-play-circle"></i> Execute
+                    </button>
+                    <button class="btn-custom mx-2" onclick="attachtogame()">
+                        <i class="bi bi-plug"></i> Attach
+                    </button>
+                    <button class="btn-custom mx-2" onclick="clearCode()">
+                        <i class="bi bi-trash"></i> Clear
+                    </button>
+                    <button class="btn-custom mx-2" onclick="r6()">
+                        <i class="bi bi-gear"></i> R6
+                    </button>
                 </div>
             </div>
         </div>
@@ -122,7 +112,7 @@
 <!-- Settings Modal -->
 <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content bg-dark text-light">
             <div class="modal-header">
                 <h5 class="modal-title" id="settingsModalLabel">Serverify Settings</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -130,19 +120,19 @@
             <div class="modal-body">
                 <div class="form-group mb-3">
                     <label for="Username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="Username" placeholder="Enter your username">
+                    <input type="text" class="form-control bg-secondary text-light" id="Username" placeholder="Enter your username">
                 </div>
                 <div class="form-group mb-3">
                     <label for="gameId" class="form-label">Game ID</label>
-                    <input type="text" class="form-control" id="gameId" placeholder="Enter Game ID">
+                    <input type="text" class="form-control bg-secondary text-light" id="gameId" placeholder="Enter Game ID">
                 </div>
                 <div class="form-group mb-3">
                     <label for="sessionid" class="form-label">Session ID</label>
-                    <input type="text" class="form-control" id="sessionid" placeholder="Enter Session ID">
+                    <input type="text" class="form-control bg-secondary text-light" id="sessionid" placeholder="Enter Session ID">
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-success" onclick="submitSettings()">Save changes</button>
             </div>
         </div>
