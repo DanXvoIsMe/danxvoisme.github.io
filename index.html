@@ -42,12 +42,24 @@
         }
 
         .editor-container {
-            width: 100%; /* Make the editor fill the entire horizontal space */
-            height: 400px; /* Adjust height as needed */
+            width: 100%; /* Ensure the editor container takes the full width */
+            height: 400px; /* Adjust height as needed or set to auto */
             border-radius: 8px;
             margin-bottom: 20px;
-            background-color: #2c2c2c; /* Match the background color */
+            background-color: #2c2c2c; /* Matching the surrounding background */
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-body {
+            width: 100%; /* Ensure the card body stretches fully */
+        }
+        
+        .main-content .card {
+            width: 100%; /* Stretch the card to match the main content width */
+            background-color: #2c2c2c; /* Matching the background */
+            border: none; /* Remove the border if necessary */
         }
 
         button {
