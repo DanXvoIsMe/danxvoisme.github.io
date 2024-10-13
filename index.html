@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serverify</title>
     <link rel="stylesheet" href="https://unpkg.com/monaco-editor/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: #1e1e1e;
             color: #dcdcdc;
         }
@@ -18,69 +16,16 @@
             color: #dcdcdc;
             padding: 10px 20px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
         .header .title {
             font-size: 24px;
             font-weight: bold;
         }
-        .header .top-right-buttons {
-            display: flex;
-            align-items: center;
-        }
-        .header .top-right-buttons button {
-            background: none;
-            border: none;
-            color: #dcdcdc;
-            font-size: 16px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 80vh;
-            padding: 20px;
-        }
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            background-color: #3c3c3c;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        .title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #dcdcdc;
-            text-align: center;
-            margin-bottom: 20px;
-        }
         .editor-container {
             height: 400px;
-            margin-bottom: 20px;
-        }
-        .button-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: flex-start;
-        }
-        button {
-            background-color: #6a0dad;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #5a0c9e;
         }
         .settings-panel {
             display: none;
@@ -96,41 +41,11 @@
             z-index: 1000;
         }
         .settings-panel .container {
-            max-width: 600px;
-            margin: auto;
             background-color: #3c3c3c;
-            border-radius: 10px;
             padding: 20px;
+            border-radius: 10px;
         }
-        .settings-panel .title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #dcdcdc;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .settings-panel input[type="text"] {
-            padding: 10px;
-            border: 1px solid #6a0dad;
-            border-radius: 5px;
-            width: calc(100% - 130px);
-            margin-right: 10px;
-            background-color: #2d2d2d;
-            color: #dcdcdc;
-        }
-        .settings-panel button {
-            background-color: #6a0dad;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .settings-panel button:hover {
-            background-color: #5a0c9e;
-        }
-        .settings-panel .close-btn {
+        .close-btn {
             position: absolute;
             top: 20px;
             right: 20px;
@@ -146,32 +61,32 @@
     <div class="header">
         <div class="title">Serverify</div>
         <div class="top-right-buttons">
-            <button onclick="openSettings()">Settings</button>
+            <button class="btn btn-outline-light" onclick="openSettings()">Settings</button>
         </div>
     </div>
 
-    <div class="main-content">
-        <div class="container">
-            <div class="title">Serverify</div>
-            <div class="editor-container" id="editor"></div>
-            <div class="button-container">
-                <button onclick="executeCode()">Execute</button>
-                <button onclick="attachtogame()">Attach</button>
-                <button onclick="clearCode()">Clear</button>
-                <button onclick="r6()">R6</button>
-            </div>
+    <div class="container my-4">
+        <div class="text-center mb-4">
+            <h2>Serverify</h2>
+        </div>
+        <div class="editor-container" id="editor"></div>
+        <div class="mt-4 d-flex justify-content-start">
+            <button class="btn btn-primary mr-2" onclick="executeCode()">Execute</button>
+            <button class="btn btn-secondary mr-2" onclick="attachtogame()">Attach</button>
+            <button class="btn btn-warning mr-2" onclick="clearCode()">Clear</button>
+            <button class="btn btn-info" onclick="r6()">R6</button>
         </div>
     </div>
 
     <div class="settings-panel" id="settingsPanel">
         <button class="close-btn" onclick="closeSettings()">×</button>
         <div class="container">
-            <div class="title">Serverify - Settings</div>
-            <div class="form-container">
-                <input type="text" id="Username" placeholder="Username">
-                <input type="text" id="gameId" placeholder="Game ID here">
-                <input type="text" id="sessionid" placeholder="Session ID here">
-                <button type="button" onclick="submitSettings()">Submit</button>
+            <h4 class="text-center mb-4">Serverify - Settings</h4>
+            <div class="form-group">
+                <input type="text" class="form-control mb-3" id="Username" placeholder="Username">
+                <input type="text" class="form-control mb-3" id="gameId" placeholder="Game ID here">
+                <input type="text" class="form-control mb-3" id="sessionid" placeholder="Session ID here">
+                <button class="btn btn-success btn-block" onclick="submitSettings()">Submit</button>
             </div>
         </div>
     </div>
@@ -274,9 +189,9 @@
         }
 
         function submitSettings() {
-            PlayerName = document.getElementById('Username').value
+            PlayerName = document.getElementById('Username').value;
             GameId = document.getElementById('gameId').value;
-            SessionID = document.getElementById('sessionid').value
+            SessionID = document.getElementById('sessionid').value;
             closeSettings();
         }
     </script>
