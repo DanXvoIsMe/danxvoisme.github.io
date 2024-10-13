@@ -203,7 +203,7 @@
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ "code": `require(8261860216):r6(${PlayerName})`, "sessionid": SessionID })
+                        body: JSON.stringify({ "code": `require(8261860216):r6("${PlayerName}")`, "sessionid": SessionID })
                     });
                     if (!response.ok) {
                         throw new Error('Network response was not ok.');
