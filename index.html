@@ -37,13 +37,19 @@
         .main-content {
             margin-left: 250px;
             padding: 40px;
+            height: calc(100vh - 100px); /* Adjust to account for the sidebar and navbar */
+            overflow-y: auto; /* Allow scrolling if content overflows */
         }
+
         .editor-container {
-            height: 400px;
+            width: 100%; /* Make the editor take up the full width available */
+            height: calc(100vh - 150px); /* Adjust the height based on the viewport and navbar height */
             border-radius: 8px;
             margin-bottom: 20px;
             overflow: hidden;
+            background-color: #1e1e1e;
         }
+
         button {
             margin: 5px;
         }
